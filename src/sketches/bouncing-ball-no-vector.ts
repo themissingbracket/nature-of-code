@@ -30,6 +30,10 @@ const initialize:Initialize = (p5): void => {
           p5.ellipse(location.x,location.y,16,16);
 
     }
+    p5.reset = () => {
+        location = p5.createVector(100, 100)
+        velocity = p5.createVector(2, 5, 5)
+    }
 }
 
 export const BouncingBallWithNoVector: SketchConfig = {

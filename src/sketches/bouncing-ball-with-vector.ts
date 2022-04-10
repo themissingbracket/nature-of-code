@@ -28,6 +28,12 @@ const initialize :Initialize = (p5): void => {
           p5.ellipse(config.x,config.y,16,16);
 
     }
+    p5.reset = () => {
+        config.x = 100
+        config.y = 100
+        config.xSpeed = 1
+        config.ySpeed = 3.3
+    }
 }
 
 export const BouncingBallWithVector: SketchConfig = {

@@ -1,5 +1,8 @@
-import * as P5 from 'p5'
+import _P5 from 'p5'
 
+export type P5 = _P5 & {
+    reset?: () => void
+}
 
 export type Initialize = (p5: P5) => void
 
