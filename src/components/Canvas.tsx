@@ -11,30 +11,37 @@ const Canvas: React.FC = () => {
     const canvasTarget = useRef<HTMLDivElement>(null)
     const canvasRef = useRef<P5 | null>(null)
     const [ isPaused, setIsPaused ] = useState<boolean>(false)
-    useEffect(() => {
-        if(!selectedSketch || !canvasTarget.current) return
-        canvasRef.current?.remove()
-        canvasRef.current = new p5(selectedSketch.initialize, canvasTarget.current) as P5
 
-
-
-
-    }, [selectedSketch])
+    const reset = useCallback((p5: P5): void => {
+        p5.noLoop()
+        p5.reset && p5.reset()
+        p5.draw()
+        if(!isPaused) p5.loop()
+    }, [isPaused])
 
     const playPauseButton = useCallback(() =>setIsPaused(!isPaused),  [isPaused])
     useEffect(() => {
       if(!canvasRef.current) return
       isPaused ? canvasRef.current.noLoop() : canvasRef.current.loop()
     },[isPaused])
+    useEffect(() => {
+      if(!selectedSketch || !canvasTarget.current) return
+      canvasRef.current?.remove()
+      canvasRef.current = new p5(selectedSketch.initialize, canvasTarget.current) as P5
+  }, [selectedSketch])
+
+
     const stopButton = useCallback(() => {
       if (!canvasRef.current) return
+      reset(canvasRef.current)
+    }, [reset])
 
-      const { reset = () => {
-          // Void function
-      } } = canvasRef.current
-
-      reset.call(canvasRef.current)
-    }, [])
+    useEffect(() => {
+      if(!selectedSketch || !canvasRef.current) return
+      if(isPaused) {
+        canvasRef.current.noLoop()
+      }
+    }, [isPaused, selectedSketch])
 
   return (
       <Stack spacing={2}
@@ -48,10 +55,10 @@ const Canvas: React.FC = () => {
               </Typography>
               <div ref={canvasTarget} />
           <ButtonGroup variant="contained" aria-label="outlined primary button group">
-              <IconButton color='primary' onClick={playPauseButton}>
-                { isPaused ? <Pause /> : <PlayArrow /> }
+              <IconButton color='primary' onClick={playPauseButton} disableRipple>
+                { isPaused ? <PlayArrow /> : <Pause /> }
               </IconButton>
-              <IconButton color='primary' onClick={stopButton}>
+              <IconButton color='secondary' onClick={stopButton} disableRipple>
                 <Stop />
               </IconButton>
             </ButtonGroup>
