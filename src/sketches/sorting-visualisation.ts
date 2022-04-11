@@ -11,16 +11,16 @@ const initialize: Initialize = (p5) => {
         data[indexB] = temp
     }
     p5.setup = () => {
-        p5.createCanvas(p5.windowHeight, 360)
+        p5.createCanvas(800, 300)
         p5.background(0)
         for(let i=0; i< p5.width; i++) {
-            data.push(p5.random(p5.height))
+            data.push(p5.random(300))
         }
     }
 
     p5.draw = () => {
-        if(data[i] < data[i + 1]) {
-            swap(i, i+1)
+        if(data[i] > data[i + 1]) {
+            swap(i + 1, i)
         }
         if(n < data.length) {
             i += 1
@@ -33,8 +33,9 @@ const initialize: Initialize = (p5) => {
         }
 
         data.forEach((value, idx) => {
-            idx === i ? p5.stroke(255, 0, 0) : p5.stroke(255)
-            p5.line(i, p5.height, i, p5.height - value)
+            // idx === i ? p5.stroke(255, 0, 0) : p5.stroke(255)
+            p5.stroke(255)
+            p5.line(idx, p5.height, idx, p5.height - value)
         })
     }
 
